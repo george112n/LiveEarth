@@ -72,7 +72,7 @@ public class GetWeather extends DefaultHandler
 			xmlReader.setErrorHandler(new MyErrorHandler(System.err));
 
 			xmlReader.setContentHandler((ContentHandler) new GetWeather());
-			xmlReader.parse("http://api.openweathermap.org/data/2.5/weather?lat=51.441592&lon=0.367756&appid=ac594611afb90c97e2382439671e9112&mode=xml");
+			xmlReader.parse("http://api.openweathermap.org/data/2.5/weather?lat=51.441592&lon=0.367756&appid=&mode=xml");
 		}
 		catch (SAXException e)
 		{
