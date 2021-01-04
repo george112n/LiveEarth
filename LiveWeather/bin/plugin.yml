@@ -1,0 +1,12 @@
+name: LiveWeather
+version: 1.1
+main: LiveWeather.Main
+description: Allows player to experience live weather in the location they are at
+
+commands:
+    liveweather:
+        usage: /<command> [fog]
+        description: Toggles live weather or fog on and off. Weather off turns fog off.
+    livetime:
+        usage: /<command>
+        description: Toggles live time on and off
