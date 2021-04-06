@@ -7,10 +7,10 @@
 package LiveWeather.listeners;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.scheduler.BukkitScheduler;
 
 import LiveWeather.Main;
 import LiveWeather.UpdateCall;
@@ -21,35 +21,20 @@ public class JoinEvent implements Listener
 	
 	public JoinEvent(Main plugin)
 	{
+		Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "[Liveweather] JoinEvent loaded");
 		this.plugin = plugin;
 		Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
 	}
 	
 	@EventHandler
 	public void playerJoin(PlayerJoinEvent event)
-	{		
-		int minute = (int) 1200L;
-		
+	{
+		Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "[Liveweather] Player joined, calling update call");
 		UpdateCall up = new UpdateCall(plugin, event);
-		up.initialRun();
-		
-		BukkitScheduler scheduler = plugin.getServer().getScheduler();
-		scheduler.scheduleSyncRepeatingTask(plugin, new UpdateCall(plugin, event) ,
-				minute * plugin.getConfig().getInt("timerInterval"),
-				minute * plugin.getConfig().getInt("timerInterval"));
+		Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "[Liveweather] Running initial run");
+		up.initialRun();	
 	}
 }
 //End Class
 
 //Created by Bluecarpet in London
-
-
-
-
-
-
-
-
-
-
-

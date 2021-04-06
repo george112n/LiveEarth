@@ -1,6 +1,7 @@
 package LiveWeather;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.time.LocalDateTime;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -72,7 +73,7 @@ public class GetWeather extends DefaultHandler
 			xmlReader.setErrorHandler(new MyErrorHandler(System.err));
 
 			xmlReader.setContentHandler((ContentHandler) new GetWeather());
-			xmlReader.parse("http://api.openweathermap.org/data/2.5/weather?lat=51.441592&lon=0.367756&appid=&mode=xml");
+			xmlReader.parse("http://api.openweathermap.org/data/2.5/weather?lat=51.441592&lon=0.367756&appid=ac594611afb90c97e2382439671e9112&mode=xml");
 		}
 		catch (SAXException e)
 		{
@@ -127,12 +128,44 @@ public class GetWeather extends DefaultHandler
 				//	System.out.println(atts.getValue(i));
 				if (atts.getLocalName(i).equals("number"))
 				{
-					current.weather.setNumber(Integer.parseInt(atts.getValue(i)));
+					current.setNumber(Integer.parseInt(atts.getValue(i)));
+				}
+			}
+		}
+		//Checks the element name for sun
+		else if (localName.equals("sun"))
+		{
+			//Goes through the attributes of sun until it finds rise and set
+			for (i = 0 ; i < iAttributes ; i++)
+			{
+				//	System.out.print("Member "+i+": " + atts.getLocalName(i) +" = ");
+				//	System.out.println(atts.getValue(i));
+				if (atts.getLocalName(i).equals("rise"))
+				{
+					current.setSunrise((LocalDateTime.parse(atts.getValue(i))));
+				}
+				if (atts.getLocalName(i).equals("set"))
+				{
+					current.setSunset((LocalDateTime.parse(atts.getValue(i))));
+				}
+			}
+		}
+		//Checks the element name for city
+		else if (localName.equals("city"))
+		{
+			//Goes through the attributes of city until it finds name
+			for (i = 0 ; i < iAttributes ; i++)
+			{
+				//	System.out.print("Member "+i+": " + atts.getLocalName(i) +" = ");
+				//	System.out.println(atts.getValue(i));
+				if (atts.getLocalName(i).equals("name"))
+				{
+					current.setCityName(atts.getValue(i));
 				}
 			}
 		}
 	}
-
+	
 	public void endDocument() throws SAXException
 	{
 		

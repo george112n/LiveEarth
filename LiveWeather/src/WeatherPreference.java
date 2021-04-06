@@ -9,13 +9,14 @@ import java.sql.Statement;
  * @time 12:17:19
  */
 
-public class WeatherPreference extends Main
+public class WeatherPreference
 {
 	//Member variable
 	private String UUID;
 	private boolean LiveWeather;
 	private boolean LiveFog;
 	private boolean LiveTime;
+//	private boolean Seasonal;
 	
 	//Contructor
 	public WeatherPreference()
@@ -30,6 +31,7 @@ public class WeatherPreference extends Main
 		this.LiveFog = false;
 		this.LiveWeather = false;
 		this.LiveTime = false;
+	//	this.Seasonal = false;
 	}
 
 	//Setters
@@ -51,7 +53,11 @@ public class WeatherPreference extends Main
 	{
 		return this.LiveTime;
 	}
-	
+/*	public boolean getSeasonal()
+	{
+		return this.Seasonal;
+	}
+*/
 	//Set by UUID
 	public void fetchFromUUID()
 	{
@@ -65,9 +71,9 @@ public class WeatherPreference extends Main
 		try
 		{
 			//Collects all fields for the specified EID
-			sql = "SELECT * FROM "+this.dbConnection.WeatherPreferences +" WHERE UUID = \""+this.UUID +"\"";
+			sql = "SELECT * FROM "+Main.getInstance().WeatherPreferences +" WHERE UUID = \""+this.UUID +"\"";
 			
-			SQL = dbConnection.connection.createStatement();
+			SQL = Main.getInstance().connection.createStatement();
 			resultSet = SQL.executeQuery(sql);
 			//Moves the curser to the next line
 			bSuccess = resultSet.next();
@@ -89,6 +95,7 @@ public class WeatherPreference extends Main
 				this.LiveWeather = resultSet.getBoolean("LiveWeather");
 				this.LiveFog = resultSet.getBoolean("LiveFog");
 				this.LiveTime = resultSet.getBoolean("LiveTime");
+			//	this.Seasonal = resultSet.getBoolean("Seasonal");
 			}
 			else
 			{
@@ -114,9 +121,9 @@ public class WeatherPreference extends Main
 		try
 		{
 			//Collects all fields for the specified EID
-			sql = "SELECT * FROM "+this.dbConnection.WeatherPreferences +" WHERE UUID = \""+this.UUID +"\"";
+			sql = "SELECT * FROM "+Main.getInstance().WeatherPreferences +" WHERE UUID = \""+this.UUID +"\"";
 			
-			SQL = dbConnection.connection.createStatement();
+			SQL = Main.getInstance().connection.createStatement();
 			resultSet = SQL.executeQuery(sql);
 			//Moves the curser to the next line
 			bSuccess = resultSet.next();
@@ -162,14 +169,14 @@ public class WeatherPreference extends Main
 		try
 		{
 			if (newWeatherPref)
-				sql = "UPDATE "+dbConnection.WeatherPreferences +" SET LiveWeather = 1 Where UUID = \""+this.UUID+"\";";
+				sql = "UPDATE "+Main.getInstance().WeatherPreferences +" SET LiveWeather = 1 Where UUID = \""+this.UUID+"\";";
 			else
 			{
-				sql = "UPDATE "+dbConnection.WeatherPreferences +" SET LiveWeather = 0 Where UUID = \""+this.UUID+"\";";
+				sql = "UPDATE "+Main.getInstance().WeatherPreferences +" SET LiveWeather = 0 Where UUID = \""+this.UUID+"\";";
 				//Turns fog off
 				manualFog(0);
 			}
-			SQL = dbConnection.connection.createStatement();
+			SQL = Main.getInstance().connection.createStatement();
 			
 			//Executes the update and returns how many rows were changed
 			iCount = SQL.executeUpdate(sql);
@@ -194,9 +201,9 @@ public class WeatherPreference extends Main
 		
 		try
 		{
-			sql = "UPDATE "+dbConnection.WeatherPreferences +" SET LiveFog = "+i +" Where UUID = \""+this.UUID+"\";";
+			sql = "UPDATE "+Main.getInstance().WeatherPreferences +" SET LiveFog = "+i +" Where UUID = \""+this.UUID+"\";";
 			
-			SQL = dbConnection.connection.createStatement();
+			SQL = Main.getInstance().connection.createStatement();
 			
 			//Executes the update and returns how many rows were changed
 			iCount = SQL.executeUpdate(sql);
@@ -224,12 +231,12 @@ public class WeatherPreference extends Main
 		try
 		{
 			if (newFogPref)
-				sql = "UPDATE "+dbConnection.WeatherPreferences +" SET LiveFog = 1 Where UUID = \""+this.UUID+"\";";
+				sql = "UPDATE "+Main.getInstance().WeatherPreferences +" SET LiveFog = 1 Where UUID = \""+this.UUID+"\";";
 			else
 			{
-				sql = "UPDATE "+dbConnection.WeatherPreferences +" SET LiveFog = 0 Where UUID = \""+this.UUID+"\";";
+				sql = "UPDATE "+Main.getInstance().WeatherPreferences +" SET LiveFog = 0 Where UUID = \""+this.UUID+"\";";
 			}
-			SQL = dbConnection.connection.createStatement();
+			SQL = Main.getInstance().connection.createStatement();
 			
 			//Executes the update and returns how many rows were changed
 			iCount = SQL.executeUpdate(sql);
@@ -258,12 +265,12 @@ public class WeatherPreference extends Main
 		try
 		{
 			if (newTimePref)
-				sql = "UPDATE "+dbConnection.WeatherPreferences +" SET LiveTime = 1 Where UUID = \""+this.UUID+"\";";
+				sql = "UPDATE "+Main.getInstance().WeatherPreferences +" SET LiveTime = 1 Where UUID = \""+this.UUID+"\";";
 			else
 			{
-				sql = "UPDATE "+dbConnection.WeatherPreferences +" SET LiveTime = 0 Where UUID = \""+this.UUID+"\";";
+				sql = "UPDATE "+Main.getInstance().WeatherPreferences +" SET LiveTime = 0 Where UUID = \""+this.UUID+"\";";
 			}
-			SQL = dbConnection.connection.createStatement();
+			SQL = Main.getInstance().connection.createStatement();
 			
 			//Executes the update and returns how many rows were changed
 			iCount = SQL.executeUpdate(sql);
@@ -279,6 +286,41 @@ public class WeatherPreference extends Main
 		return newTimePref;
 	}
 	
+/*	public boolean toogleSeasonal()
+	{
+		//Puts current value through a NOT operation
+		boolean newSeasonalPref = !this.Seasonal;
+		
+		int iCount = -1;
+		String sql;
+		
+		Statement SQL = null; 
+		
+		try
+		{
+			if (newSeasonalPref)
+				sql = "UPDATE "+Main.getInstance().WeatherPreferences +" SET Seasonal = 1 Where UUID = \""+this.UUID+"\";";
+			else
+			{
+				sql = "UPDATE "+Main.getInstance().WeatherPreferences +" SET Seasonal = 0 Where UUID = \""+this.UUID+"\";";
+			}
+			SQL = Main.getInstance().connection.createStatement();
+			
+			//Executes the update and returns how many rows were changed
+			iCount = SQL.executeUpdate(sql);
+		}
+		catch (SQLException se)
+		{
+			se.printStackTrace();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		return newSeasonalPref;
+	}
+	*/
+	
 	//--------------------------------------
 	//----Creating new preference record----
 	//--------------------------------------
@@ -291,16 +333,13 @@ public class WeatherPreference extends Main
 		
 		Statement SQL = null;
 		
-		DBConnection dbConnection = new DBConnection();
-		dbConnection.connect();
-		
 		try
 		{
 			//Compiles the command to add the new user
-			sql = "INSERT INTO "+dbConnection.WeatherPreferences +" (UUID)"
-					+ "VALUES("
-					+ this.UUID +");";
-			SQL = dbConnection.connection.createStatement();
+			sql = "INSERT INTO "+Main.getInstance().WeatherPreferences +" (UUID)"
+					+ "VALUES(\""
+					+ this.UUID +"\");";
+			SQL = Main.getInstance().connection.createStatement();
 			
 			//Executes the update and returns the amount of records updated
 			iCount = SQL.executeUpdate(sql);
@@ -320,14 +359,8 @@ public class WeatherPreference extends Main
 		{
 			e.printStackTrace();
 		}
-		finally
-		{
-			dbConnection.disconnect();
-		}
 		return bSuccess;
 	}
-
-}
-//End Class
+} //End Class
 
 //Created by Bluecarpet in London

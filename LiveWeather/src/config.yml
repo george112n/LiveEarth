@@ -2,7 +2,7 @@ MySQL_host: LocalHost
 MySQL_port: 3306
 MySQL_database: LiveWeather
 MySQL_username: newuser1
-MySQL_password: xxx
+MySQL_password: xxxx
 MySQL_weatherpreferences: WeatherPreferences
 timerInterval: 5
 apiKey: ac594611afb90c97e2382439671e9112
