@@ -1,5 +1,5 @@
 name: LiveWeather
-version: 2.2.5
+version: 2.4.1
 main: LiveWeather.Main
 description: Allows player to experience live weather in the location they are at and live time, always seasonal
 
@@ -9,4 +9,4 @@ commands:
         description: Toggles live weather or fog on and off. Turning weather off turns fog off.
     livetime:
         usage: /<command> [player]
-        description: Toggles live time on and off
+        description: Toggles live time on and off.
