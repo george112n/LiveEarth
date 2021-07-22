@@ -6,10 +6,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="java/mohist-1.12.2-165-server.jar" sourcepath="/Volumes/HP SCHOOL/Workspace/Mohist/src/org">
-		<attributes>
-			<attribute name="javadoc_location" value="file:/Volumes/HP%20SCHOOL/Workspace/Mohist/org/"/>
-		</attributes>
-	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/Laurens/Downloads/spigot-1.12.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

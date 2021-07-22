@@ -23,13 +23,13 @@ public class LiveWeather implements CommandExecutor
 	@EventHandler
 	public void onCmd(PlayerCommandPreprocessEvent e)
 	{
-		if (!(e.getPlayer().hasPermission("Liveweather.weather.ToogleSelf") || e.getPlayer().hasPermission("Liveweather.weather.ToogleOthers")))
+		if (!(e.getPlayer().hasPermission("Liveweather.weather.toggleSelf") || e.getPlayer().hasPermission("Liveweather.weather.toggleOthers")))
 		{
 			e.setCancelled(true);
 			e.getPlayer().sendMessage(ChatColor.RED +"You do not have permission to use this command");
 		}
 	}
-	
+
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
 	{
@@ -39,194 +39,90 @@ public class LiveWeather implements CommandExecutor
 			sender.sendMessage("&cYou cannot give a non player weather!");
 			return true;
 		}
-		
+
 		//Convert sender to player
 		Player p = (Player) sender;
-		
+
 		//Initiate player preferences
 		WeatherPreference wp = new WeatherPreference();
-		
-		//Check whether amount of args is greater than 2
-		if (args.length > 2)
-		{
-			if (p.hasPermission("Liveweather.weather.ToogleOthers"))
-				p.sendMessage(ChatColor.RED + "/liveweather [fog] [player]");
-			else
-				p.sendMessage(ChatColor.RED + "/liveweather [fog]");
-			return true;
-		}
-		
+
 		//Used for toggling live weather on and off
 		if (args.length == 0)
 		{
-			if (!p.hasPermission("Liveweather.weather.ToogleSelf"))
+			if (!p.hasPermission("Liveweather.weather.toggleSelf"))
 			{
-				p.sendMessage(ChatColor.RED +"You do not have permission to toogle your live weather on and off");
+				p.sendMessage(ChatColor.RED +"You do not have permission to toggle your live weather");
 				return true;
 			}
 			//Sets the UUID into the wp class
 			wp.setUUID(p.getUniqueId().toString());
-			
+
 			//Gets weather preferences
 			wp.fetchFromUUID();
-			
+
 			//Fog is turned off within function if weather is turned off
 			boolean newState = wp.toogleWeather();
 			if (newState)
 			{
-				p.sendMessage(ChatColor.GOLD + "Live weather enabled. Toggle fog with /liveweather fog");
+				p.sendMessage(ChatColor.GOLD + "Live weather enabled.");
 				LiveWeatherUtil LWU = new LiveWeatherUtil(p);
 				//Updates whether
-				LWU.call(true, false, false, true);
+				LWU.call(true, false, true);
 				p.sendMessage(ChatColor.GOLD + "Weather set to "+ChatColor.RED +LWU.szWeather +ChatColor.GOLD+" at "+ChatColor.RED +LWU.szLocation);
 			}
 			else
 			{
-				p.sendMessage(ChatColor.GOLD + "Live weather and fog disabled");
+				p.sendMessage(ChatColor.GOLD + "Live weather disabled");
 				p.resetPlayerWeather();
 			}
 			return true;
 		}
-		
+
 		//For fog or player
 		if (args.length == 1)
 		{
-			//Fog
-			if (args[0].equalsIgnoreCase("fog"))
+			//Attempt to get player
+			if (p.hasPermission("Liveweather.weather.toggleOthers"))
 			{
-				if (!p.hasPermission("Liveweather.weather.ToogleSelf"))
+				//-----------Forked from Elgamer-----------
+				Player user = Bukkit.getPlayer(args[0]);
+
+				if (user == null)
 				{
-					p.sendMessage(ChatColor.RED +"You do not have permission to toogle your fog on and off");
+					p.sendMessage(ChatColor.RED + args[0] + " is not online!");
 					return true;
 				}
-				
+
 				//Sets the UUID into the wp class
-				wp.setUUID(p.getUniqueId().toString());
-				
+				wp.setUUID(user.getUniqueId().toString());
+
 				//Gets weather preferences
 				wp.fetchFromUUID();
 
-				boolean newState = wp.toogleFog();
+				//Fog is turned off within function if weather is turned off
+				boolean newState = wp.toogleWeather();
 				if (newState)
 				{
-					p.sendMessage(ChatColor.GOLD + "Live fog enabled");
-					LiveWeatherUtil LWU = new LiveWeatherUtil(p);
-					//Updates fog
-					LWU.call(false, true, false, true);
-				//	p.sendMessage(ChatColor.GOLD + "Set fog to"+ChatColor.RED +p.getPlayerWeather());
-				}
-				else
-				{
-					p.sendMessage(ChatColor.GOLD + "Live fog disabled");
-				//	p.resetPlayerWeather();
-					//Perform fog reset
-				}
-			}
-			
-			//Not fog
-			else
-			{
-				//Attempt to get player
-				if (p.hasPermission("Liveweather.weather.ToogleOthers"))
-				{
-					//-----------Forked from Elgamer-----------
-					Player user = Bukkit.getPlayer(args[0]);
-					
-					if (user == null)
-					{
-						user = Bukkit.getOfflinePlayer(args[0]).getPlayer();
-						if (user == null)
-						{
-							p.sendMessage(ChatColor.RED + args[0] + " is not online!");
-							return true;
-						}
-					}
-					//-----------------------------------------
-					//Sets the UUID into the wp class
-					wp.setUUID(user.getUniqueId().toString());
-					
-					//Gets weather preferences
-					wp.fetchFromUUID();
-					
-					//Fog is turned off within function if weather is turned off
-					boolean newState = wp.toogleWeather();
-					if (newState)
-					{
-						p.sendMessage(ChatColor.GOLD + "Live weather enabled for "+user.getName());
-						user.sendMessage(ChatColor.GOLD +p.getName() +" enabled your live weather");
-						LiveWeatherUtil LWU = new LiveWeatherUtil(user);
-						//Updates whether
-						LWU.call(true, false, false, true);
-						user.sendMessage(ChatColor.GOLD + "Weather set to "+ChatColor.RED +LWU.szWeather +ChatColor.GOLD+" at "+ChatColor.RED +LWU.szLocation);
-					}
-					else
-					{
-						p.sendMessage(ChatColor.GOLD + "Live weather and fog disabled for "+user.getName());
-						user.sendMessage(ChatColor.GOLD +p.getName() +" disabled your live weather");
-						user.resetPlayerWeather();
-					}
-					return true;
-				}
-				else
-				{
-					p.sendMessage(ChatColor.RED + "/liveweather [fog]");
-				}
-			}
-		}
-		
-		if (args.length == 2)
-		{
-			if (!p.hasPermission("Liveweather.weather.ToogleOthers"))
-			{
-				p.sendMessage(ChatColor.RED + "/liveweather [fog]");
-				return true;
-			}
-			else if (!args[0].equalsIgnoreCase("fog"))
-			{
-				p.sendMessage(ChatColor.RED + "/liveweather [fog] [player]");
-				return true;
-			}
-			else
-			{
-				//-----------Forked from Elgamer-----------
-				Player user = Bukkit.getPlayer(args[1]);
-				
-				if (user == null)
-				{
-					user = Bukkit.getOfflinePlayer(args[1]).getPlayer();
-					if (user == null)
-					{
-						p.sendMessage(ChatColor.RED + args[1] + " is not online!");
-						return true;
-					}
-				}
-				//-----------------------------------------
-				
-				//Sets the UUID into the wp class
-				wp.setUUID(user.getUniqueId().toString());
-				
-				//Gets weather preferences
-				wp.fetchFromUUID();
-				
-				boolean newState = wp.toogleFog();
-				if (newState)
-				{
-					p.sendMessage(ChatColor.GOLD + "Live fog enabled for "+user.getName());
-					user.sendMessage(ChatColor.GOLD +p.getName() +" enabled your live fog");
+					p.sendMessage(ChatColor.GOLD + "Live weather enabled for "+user.getName());
+					user.sendMessage(ChatColor.GOLD +p.getName() +" enabled your live weather");
 					LiveWeatherUtil LWU = new LiveWeatherUtil(user);
-					//Updates fog
-					LWU.call(false, true, false, true);
-				//	p.sendMessage(ChatColor.GOLD + "Set fog to"+ChatColor.RED +p.getPlayerWeather());
+					//Updates whether
+					LWU.call(true, false, true);
+					user.sendMessage(ChatColor.GOLD + "Weather set to "+ChatColor.RED +LWU.szWeather +ChatColor.GOLD+" at "+ChatColor.RED +LWU.szLocation);
 				}
 				else
 				{
-					p.sendMessage(ChatColor.GOLD + "Live fog disabled for "+user.getName());
-					user.sendMessage(ChatColor.GOLD +p.getName() +" disabled your live fog");
-				//	p.resetPlayerWeather();
-					//Perform fog reset
+					p.sendMessage(ChatColor.GOLD + "Live weather disabled for "+user.getName());
+					user.sendMessage(ChatColor.GOLD +p.getName() +" disabled your live weather");
+					user.resetPlayerWeather();
 				}
+				return true;
+			} else {
+				p.sendMessage(ChatColor.RED + "You do not have permission to toggle liveweather of others!");
 			}
+
 		}
+
 		return true;
 	}
 } //End Class

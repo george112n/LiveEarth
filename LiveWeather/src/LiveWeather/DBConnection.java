@@ -58,7 +58,7 @@ public class DBConnection extends Main
 		this.WeatherPreferences = getConfig().getString("MySQL_weatherpreferences");
 		
 		this.DB_CON = "jdbc:mysql://" + this.HOST + ":" 
-				+ this.PORT + "/" + this.Database;
+				+ this.PORT + "/" + this.Database + "?&useSSL=false&";
 	}
 	
 	public boolean connect() 

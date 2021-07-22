@@ -27,31 +27,26 @@ import LiveWeather.listeners.pTimeEvent;
  */
 
 public class Main extends JavaPlugin
-{
-	public void main(String[] args)
-	{
-		onEnable();
-	}
-	
+{	
 	String sql;
-	
+
 	Statement SQL = null; 
 	ResultSet resultSet = null;
-	
+
 	static Main instance;
 	static FileConfiguration config;
-	
+
 	private String HOST;
 	private int PORT;
 	public String Database;
 	private String USER;
 	private String PASSWORD;
 	public String WeatherPreferences;
-	
+
 	private Connection connection = null;
-    
+
 	boolean bIsConnected;
-	
+
 	private String DB_CON = "jdbc:mysql://LocalHost/LiveWeather";
 
 	@Override
@@ -61,7 +56,7 @@ public class Main extends JavaPlugin
 		Main.instance = this;
 		Main.config = this.getConfig();
 		saveDefaultConfig();
-		
+
 		//MySQL
 		boolean bSuccess;
 		mysqlSetup();
@@ -74,7 +69,7 @@ public class Main extends JavaPlugin
 
 		//Creates the mysql table if not already exists
 		createWeatherPrefsTable();
-		
+
 		//Listeners
 		new JoinEvent(this);
 		new pTimeEvent(this);
@@ -83,9 +78,9 @@ public class Main extends JavaPlugin
 		//Commands
 		getCommand("liveweather").setExecutor(new LiveWeather());
 		getCommand("livetime").setExecutor(new LiveTime());
-		
+
 		int minute = (int) 1200L;
-		
+
 		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable()
 		{
 			public void run()
@@ -95,14 +90,14 @@ public class Main extends JavaPlugin
 			}
 		}, 0L, minute * config.getInt("timerInterval"));
 	}
-	
+
 	@Override
 	public void onDisable()
 	{
 		disconnect();
 	}
-	
-/*	public static long updateTime(Player player)
+
+	/*	public static long updateTime(Player player)
 	{
 		long lCurrentTime;
 		long militaryTime;
@@ -111,7 +106,7 @@ public class Main extends JavaPlugin
 		player.setPlayerTime(lCurrentTime, false);
 		return militaryTime;
 	}
-*/
+	 */
 	public static long updateTimeSeasonal(Player player, LocalDateTime sunrise, LocalDateTime sunset)
 	{
 		long lSeasonalTime;
@@ -123,65 +118,65 @@ public class Main extends JavaPlugin
 		float fractionOfNightlightComplete;
 		float fSunset = sunset.getHour()*60 + sunset.getMinute();
 		float fSunrise = sunrise.getHour()*60 + sunrise.getMinute();
-		
+
 		//Daylight in minutes
 		float fDaylight = 60*(sunset.getHour() - sunrise.getHour()) + sunset.getMinute() - sunrise.getMinute();
-		
+
 		float fMinutesAfterSunrise = ((LocalTime.now().getHour()-sunrise.getHour())*60 + (LocalTime.now().getMinute())-sunrise.getMinute());
-		
+
 		//Work out the minecraft ticks count
 		fractionOfDaylightComplete = fMinutesAfterSunrise/fDaylight;
 		lSeasonalTime = (long) (mcSunRise + fractionOfDaylightComplete * mcSunLight);
-		
+
 		if (fMinutesAfterSunrise < 0) //Sun not risen
 		{
 			if (lSeasonalTime < 22000)
 			{
 				float fMinutesOfNightAlg = fSunrise - 937 *(fDaylight/mcSunLight);
-			//	System.out.println("Mins btween sunset + nghtalg: "+fMinutesOfNightAlg);
+				//	System.out.println("Mins btween sunset + nghtalg: "+fMinutesOfNightAlg);
 				fractionOfNightlightComplete = ((float)(LocalTime.now().getHour()*60 + LocalTime.now().getMinute())/ (fMinutesOfNightAlg));
-				
-			//	System.out.println(fractionOfNightlightComplete);
+
+				//	System.out.println(fractionOfNightlightComplete);
 				lSeasonalNightTime = (long) (18000 + fractionOfNightlightComplete*4000);
 				lSeasonalTime = lSeasonalNightTime;
 			}
 			else
 			{
-				
+
 			}
 		}
 		else if (fMinutesAfterSunrise < fDaylight) //Sun still up
 		{
 			//Delt with as standard
 		}
-		
+
 		else //Sun has set but is before midnight
 		{
 			lSeasonalTime = lSeasonalTime - 24000;
-			
+
 			//If the seasonal time goes over 14000, use night algorithm
 			if (!(lSeasonalTime < 14000))
 			{
 				//Minutes of the day that the night algorithm begins
 				float fMinutesOfNightAlg = fSunset + 957 *(fDaylight/mcSunLight);
-				
+
 				//Fration of night alg to midnight that is done
 				fractionOfNightlightComplete = ((float)(LocalTime.now().getHour()*60 + LocalTime.now().getMinute())-(fMinutesOfNightAlg))/ (1440 - (fMinutesOfNightAlg));
-				
+
 				//Ticks
 				lSeasonalNightTime = (long) (14000 + fractionOfNightlightComplete*4000);
 				lSeasonalTime = lSeasonalNightTime;
 			}
 		}
-		
+
 		lSeasonalTime = lSeasonalTime % 24000;
-		
+
 		player.setPlayerTime(lSeasonalTime, false);
-		
+
 		militaryTime = (LocalTime.now().getHour()+config.getLong("HourOffset"))*100 + LocalTime.now().getMinute();
 		return militaryTime;
 	}
-	
+
 	public void mysqlSetup()
 	{
 		this.HOST = config.getString("MySQL_host");
@@ -190,16 +185,16 @@ public class Main extends JavaPlugin
 		this.USER = config.getString("MySQL_username");
 		this.PASSWORD = config.getString("MySQL_password");
 		this.WeatherPreferences = config.getString("MySQL_weatherpreferences");
-		
+
 		this.DB_CON = "jdbc:mysql://" + this.HOST + ":" 
 				+ this.PORT + "/" + this.Database;
 	}
-	
+
 	public boolean connect() 
 	{
 		try
 		{
-		//	System.out.println(this.getClass().getName() +" : Connecting la la la");
+			//	System.out.println(this.getClass().getName() +" : Connecting la la la");
 			DriverManager.getDriver(DB_CON);
 			connection = DriverManager.getConnection(DB_CON, USER, PASSWORD);
 			if (this.connection != null)
@@ -221,7 +216,7 @@ public class Main extends JavaPlugin
 			}
 			else
 			{
-			//	e.printStackTrace();
+				//	e.printStackTrace();
 				System.out.println(e.toString());
 				Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "LiveWeather.DBConnection - Other SQLException - "+e.getMessage());			
 			}
@@ -236,14 +231,14 @@ public class Main extends JavaPlugin
 		{
 		}
 	}
-	
+
 	public void disconnect()
 	{
 		try
 		{
 			this.connection.close() ;
 			this.bIsConnected = false ;
-		//	System.err.println( this.getClass().getName() + ":: disconnected." ) ;
+			//	System.err.println( this.getClass().getName() + ":: disconnected." ) ;
 		}
 		catch ( SQLException se )
 		{
@@ -262,7 +257,7 @@ public class Main extends JavaPlugin
 		}
 		return;
 	}
-	
+
 	public boolean createWeatherPrefsTable()
 	{
 		boolean bSuccess = false;
@@ -302,12 +297,12 @@ public class Main extends JavaPlugin
 		}
 		return (bSuccess);
 	}
-	
+
 	public static Main getInstance()
 	{
 		return instance;
 	}
-	
+
 	public Connection getConnection()
 	{
 		try

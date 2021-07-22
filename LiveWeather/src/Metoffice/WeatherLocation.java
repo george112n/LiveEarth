@@ -23,8 +23,6 @@ public class WeatherLocation
 	private int i;
 	private int Elevation;
 	
-	private Period[] periods;
-	
 	public String getContinent()
 	{
 		return Continent;
