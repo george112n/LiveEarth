@@ -47,7 +47,7 @@ public class LiveTime implements CommandExecutor
 		{
 			if (!p.hasPermission("Liveweather.time.toggleSelf"))
 			{
-				p.sendMessage(ChatColor.RED +"You do not have permission to toogle your live time on and off");
+				p.sendMessage(ChatColor.RED +"You do not have permission to toggle your live time");
 				return true;
 			}
 			//Initiate player preferences
@@ -85,7 +85,7 @@ public class LiveTime implements CommandExecutor
 			{
 				if (!p.hasPermission("Liveweather.time.toggleSelf"))
 				{
-					p.sendMessage(ChatColor.RED +"You do not have permission to toogle your live time on and off");
+					p.sendMessage(ChatColor.RED +"You do not have permission to toggle your live time");
 					return true;
 				}
 				//Initiate player preferences

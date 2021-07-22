@@ -187,7 +187,7 @@ public class Main extends JavaPlugin
 		this.WeatherPreferences = config.getString("MySQL_weatherpreferences");
 
 		this.DB_CON = "jdbc:mysql://" + this.HOST + ":" 
-				+ this.PORT + "/" + this.Database;
+				+ this.PORT + "/" + this.Database + "?&useSSL=false&";
 	}
 
 	public boolean connect() 
