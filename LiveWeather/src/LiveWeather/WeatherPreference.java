@@ -161,7 +161,6 @@ public class WeatherPreference
 		//Puts current value through a NOT operation
 		boolean newWeatherPref = !this.LiveWeather;
 		
-		int iCount = -1;
 		String sql;
 		
 		Statement SQL = null; 
@@ -179,7 +178,7 @@ public class WeatherPreference
 			SQL = Main.getInstance().getConnection().createStatement();
 			
 			//Executes the update and returns how many rows were changed
-			iCount = SQL.executeUpdate(sql);
+			SQL.executeUpdate(sql);
 		}
 		catch (SQLException se)
 		{
@@ -194,7 +193,6 @@ public class WeatherPreference
 	
 	public void manualFog(int i)
 	{
-		int iCount = -1;
 		String sql;
 		
 		Statement SQL = null; 
@@ -206,7 +204,7 @@ public class WeatherPreference
 			SQL = Main.getInstance().getConnection().createStatement();
 			
 			//Executes the update and returns how many rows were changed
-			iCount = SQL.executeUpdate(sql);
+			SQL.executeUpdate(sql);
 		}
 		catch (SQLException se)
 		{
@@ -223,7 +221,6 @@ public class WeatherPreference
 		//Puts current value through a NOT operation
 		boolean newFogPref = !this.LiveFog;
 		
-		int iCount = -1;
 		String sql;
 		
 		Statement SQL = null; 
@@ -239,7 +236,7 @@ public class WeatherPreference
 			SQL = Main.getInstance().getConnection().createStatement();
 			
 			//Executes the update and returns how many rows were changed
-			iCount = SQL.executeUpdate(sql);
+			SQL.executeUpdate(sql);
 		}
 		catch (SQLException se)
 		{
@@ -257,7 +254,6 @@ public class WeatherPreference
 		//Puts current value through a NOT operation
 		boolean newTimePref = !this.LiveTime;
 		
-		int iCount = -1;
 		String sql;
 		
 		Statement SQL = null; 
@@ -273,7 +269,7 @@ public class WeatherPreference
 			SQL = Main.getInstance().getConnection().createStatement();
 			
 			//Executes the update and returns how many rows were changed
-			iCount = SQL.executeUpdate(sql);
+			SQL.executeUpdate(sql);
 		}
 		catch (SQLException se)
 		{

@@ -79,23 +79,23 @@ public class UpdateCall extends BukkitRunnable
 			if (wp.getWeather() && wp.getFog())
 			{
 				LiveWeatherUtil LWU = new LiveWeatherUtil(player);
-				LWU.call(true, true, bSeasonalTime, false);
+				LWU.call(true, bSeasonalTime, false);
 			}
 			else if (wp.getWeather())
 			{
 				LiveWeatherUtil LWU = new LiveWeatherUtil(player);
-				LWU.call(true, false, bSeasonalTime, false);
+				LWU.call(true, bSeasonalTime, false);
 			}
 			else if (wp.getFog())
 			{
 				LiveWeatherUtil LWU = new LiveWeatherUtil(player);
-				LWU.call(false, true, bSeasonalTime, false);
+				LWU.call(false, bSeasonalTime, false);
 			}
 			//Checks whether time is on and makes the api request if it is not handled through the weather api request
 			else if (bSeasonalTime)
 			{
 				LiveWeatherUtil LWU = new LiveWeatherUtil(player);
-				LWU.call(false, false, bSeasonalTime, false);
+				LWU.call(false, bSeasonalTime, false);
 			}
 		}
 	}
@@ -105,6 +105,7 @@ public class UpdateCall extends BukkitRunnable
 		Player player = this.player;
 		
 		boolean bSeasonalTime = false;
+		boolean bWeather = false;
 		
 		long lCurrentTime;
 		
@@ -154,37 +155,17 @@ public class UpdateCall extends BukkitRunnable
 	*/	
 		//Avoids making sperate api request for weather and fog
 		//Time handled through here as well
-		if (wp.getWeather() && wp.getFog())
+		if (wp.getWeather())
 		{
-			LiveWeatherUtil LWU = new LiveWeatherUtil(player);
-			LWU.call(true, true, bSeasonalTime, true);
-			lCurrentTime = LWU.lTime;
-			szTime = String.format("%02d:%02d", lCurrentTime/100, lCurrentTime %100);
-			player.sendMessage(ChatColor.GOLD + "Weather set to "+ChatColor.RED +LWU.szWeather +ChatColor.GOLD+" at "+ChatColor.RED +LWU.szLocation);
+			bWeather = true;
 		}
-		else if (wp.getWeather())
-		{
-			LiveWeatherUtil LWU = new LiveWeatherUtil(player);
-			LWU.call(true, true, bSeasonalTime, true);
-			lCurrentTime = LWU.lTime;
-			szTime = String.format("%02d:%02d", lCurrentTime/100, lCurrentTime %100);
-			player.sendMessage(ChatColor.GOLD + "Weather set to "+ChatColor.RED +LWU.szWeather +ChatColor.GOLD+" at "+ChatColor.RED +LWU.szLocation);
-		}
-		else if (wp.getFog())
-		{
-			LiveWeatherUtil LWU = new LiveWeatherUtil(player);
-			LWU.call(true, true, bSeasonalTime, true);
-			lCurrentTime = LWU.lTime;
-			szTime = String.format("%02d:%02d", lCurrentTime/100, lCurrentTime %100);
-		}
-		//Checks whether seasonal time was set on and makes the api request if it is not handled through a weather api request
-		else if (bSeasonalTime)
-		{
-			LiveWeatherUtil LWU = new LiveWeatherUtil(player);
-			LWU.call(true, true, bSeasonalTime, true);
-			lCurrentTime = LWU.lTime;
-			szTime = String.format("%02d:%02d", lCurrentTime/100, lCurrentTime %100);
-		}
+
+
+		LiveWeatherUtil LWU = new LiveWeatherUtil(player);
+		LWU.call(bWeather, bSeasonalTime, true);
+		lCurrentTime = LWU.lTime;
+		szTime = String.format("%02d:%02d", lCurrentTime/100, lCurrentTime %100);
+		
 		if (bSeasonalTime)
 		{
 			player.sendMessage(ChatColor.GOLD + "Time set to "+ChatColor.RED +szTime);
@@ -240,28 +221,17 @@ public class UpdateCall extends BukkitRunnable
 	*/	
 		//Avoids making sperate api request for weather and fog
 		//Also, if time is seasonal, it will be run through here, to avoid 2 api requests
-		if (wp.getWeather() && wp.getFog())
+		if (wp.getWeather())
 		{
 			LiveWeatherUtil LWU = new LiveWeatherUtil(player, locationTo);
-			LWU.call(true, true, bSeasonalTime, true);
+			LWU.call(true, bSeasonalTime, true);
 			player.sendMessage(ChatColor.GOLD + "Weather set to "+ChatColor.RED +LWU.szWeather +ChatColor.GOLD+" at "+ChatColor.RED +LWU.szLocation);
-		}
-		else if (wp.getWeather())
-		{
-			LiveWeatherUtil LWU = new LiveWeatherUtil(player, locationTo);
-			LWU.call(true, true, bSeasonalTime, true);
-			player.sendMessage(ChatColor.GOLD + "Weather set to "+ChatColor.RED +LWU.szWeather +ChatColor.GOLD+" at "+ChatColor.RED +LWU.szLocation);
-		}
-		else if (wp.getFog())
-		{
-			LiveWeatherUtil LWU = new LiveWeatherUtil(player, locationTo);
-			LWU.call(true, true, bSeasonalTime, true);
 		}
 		//Checks whether time was set on and makes the api request if it is not handled through a weather api request
 		else if (bSeasonalTime)
 		{
 			LiveWeatherUtil LWU = new LiveWeatherUtil(player, locationTo);
-			LWU.call(true, true, bSeasonalTime, true);
+			LWU.call(true, bSeasonalTime, true);
 		}
 	}
 } //End Class

@@ -37,7 +37,7 @@ public class LiveWeatherUtil
 		reset();
 		this.p = player;
 		this.pLocation = player.getLocation();
-		this.apiKey = Main.getInstance().config.getString("apiKey");
+		this.apiKey = Main.getInstance().getConfig().getString("apiKey");
 		this.lTime = 0L;
 	}
 	
@@ -46,7 +46,7 @@ public class LiveWeatherUtil
 		reset();
 		this.p = player;
 		this.pLocation = location;
-		this.apiKey = Main.getInstance().config.getString("apiKey");
+		this.apiKey = Main.getInstance().getConfig().getString("apiKey");
 		this.lTime = 0L;
 	}
 	
@@ -105,7 +105,7 @@ public class LiveWeatherUtil
 		System.out.println(current.getCity().getCountry());
 	}
 	
-	public void call(boolean weather, boolean fog, boolean seasonalTime, boolean bLocation)
+	public void call(boolean weather, boolean seasonalTime, boolean bLocation)
 	{
 		int iWeatherCode;
 		LocalDateTime dSunrise;
@@ -156,15 +156,6 @@ public class LiveWeatherUtil
 			}
 		}
 		
-		if (fog)
-		{	
-			//https://openweathermap.org/weather-conditions#Weather-Condition-Codes-2
-			if (iWeatherCode >= 701 && iWeatherCode <= 781)
-			{
-				//FOG COMMAND - NOT IMPLEMENTED
-			//	System.out.println("Clear");
-			}			
-		}
 		if (seasonalTime)
 		{
 			dSunrise = current.getCity().getSunrise();
