@@ -1,9 +1,12 @@
 package LiveWeather;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -48,8 +51,21 @@ public class UpdateCall extends BukkitRunnable
 		
 		Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "[LiveWeather] Running liveweather and time update");
 		
+		//Gets the list of players with live
+		ArrayList<UUID> playersWithLive = Main.getInstance().getLiveList();
+		
 		for (Player player: players)
 		{
+			//Checks whether they are in live first
+			for (UUID uuid : playersWithLive)
+			{
+				if (uuid.equals(player.getUniqueId()))
+				{
+					LiveUpdateRun(player);
+					continue;
+				}
+			}
+			
 			boolean bSeasonalTime = false;
 			
 			//Gets UUID of player
@@ -176,6 +192,19 @@ public class UpdateCall extends BukkitRunnable
 	{
 		Player player = this.player;
 		
+		//Gets the list of players with live
+		ArrayList<UUID> playersWithLive = Main.getInstance().getLiveList();
+		
+		//Checks whether they are in live first
+		for (UUID uuid : playersWithLive)
+		{
+			if (uuid.equals(player.getUniqueId()))
+			{
+				LiveUpdateRun(player);
+				return;
+			}
+		}
+			
 		boolean bSeasonalTime = false;
 				
 		//Gets UUID of player joined
@@ -234,6 +263,27 @@ public class UpdateCall extends BukkitRunnable
 			LWU.call(true, bSeasonalTime, true);
 		}
 	}
+	
+	public static void InitialLiveRun(Player p)
+	{
+		LiveWeatherUtil LWU = new LiveWeatherUtil(p);
+		LWU.call(true, true, false);
+		p.setGameMode(GameMode.ADVENTURE);
+		p.setAllowFlight(false);
+		p.setWalkSpeed((float) 0.14);
+	}
+	
+	//Same as above for now but is here for future
+	private void LiveUpdateRun(Player p)
+	{
+		LiveWeatherUtil LWU = new LiveWeatherUtil(p);
+		LWU.call(true, true, false);
+		p.setGameMode(GameMode.ADVENTURE);
+		p.setAllowFlight(false);
+		p.setWalkSpeed((float) 0.14);
+	}
+	
+	
 } //End Class
 
 //Created by Bluecarpet in London

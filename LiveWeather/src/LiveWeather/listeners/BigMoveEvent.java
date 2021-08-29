@@ -35,7 +35,7 @@ public class BigMoveEvent implements Listener
 	{ 
 		//Convert sender to player
 		Player player = event.getPlayer();
-				
+		
 		if (event.getCause() == TeleportCause.COMMAND || event.getCause() == TeleportCause.PLUGIN)
 		{
 			double FromX = event.getFrom().getX();
