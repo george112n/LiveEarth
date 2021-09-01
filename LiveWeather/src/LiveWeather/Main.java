@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -13,6 +15,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import LiveWeather.Commands.Live;
 import LiveWeather.Commands.LiveTime;
 import LiveWeather.Commands.LiveWeather;
 import LiveWeather.listeners.BigMoveEvent;
@@ -49,6 +52,8 @@ public class Main extends JavaPlugin
 
 	private String DB_CON = "jdbc:mysql://LocalHost/LiveWeather";
 
+	private ArrayList<UUID> playersWithLive;
+	
 	@Override
 	public void onEnable()
 	{
@@ -66,6 +71,9 @@ public class Main extends JavaPlugin
 		{
 			Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "[Liveweather] MySQL CONNECTED");
 		}
+	
+		//Creates List
+		playersWithLive = new ArrayList<UUID>();
 
 		//Creates the mysql table if not already exists
 		createWeatherPrefsTable();
@@ -78,6 +86,7 @@ public class Main extends JavaPlugin
 		//Commands
 		getCommand("liveweather").setExecutor(new LiveWeather());
 		getCommand("livetime").setExecutor(new LiveTime());
+		getCommand("live").setExecutor(new Live());
 
 		int minute = (int) 1200L;
 
@@ -317,6 +326,11 @@ public class Main extends JavaPlugin
 			e.printStackTrace();
 		}
 		return connection;
+	}
+	
+	public ArrayList<UUID> getLiveList()
+	{
+		return playersWithLive;
 	}
 
 } //End Class

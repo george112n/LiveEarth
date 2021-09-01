@@ -1,7 +1,7 @@
 name: LiveWeather
-version: 2.5.1
+version: 2.6.0
 main: LiveWeather.Main
-description: Allows player to experience live weather in the location they are at and live time, always seasonal
+description: Allows player to experience live weather or live time in the location they are at
 
 commands:
     liveweather:
@@ -10,3 +10,6 @@ commands:
     livetime:
         usage: /<command> [player]
         description: Toggles live time on and off.
+    live:
+        usage: /<command> [player]
+        description: Explore the world in as realistic state as possible

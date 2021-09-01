@@ -6,11 +6,16 @@
  */
 package LiveWeather.listeners;
 
+import java.util.ArrayList;
+import java.util.UUID;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 import LiveWeather.Main;
 import LiveWeather.UpdateCall;
@@ -33,6 +38,18 @@ public class JoinEvent implements Listener
 		UpdateCall up = new UpdateCall(plugin, event);
 		Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "[Liveweather] Running initial run");
 		up.initialRun();	
+	}
+	
+	@EventHandler
+	public void playerLeave(PlayerQuitEvent event)
+	{
+		Player p = event.getPlayer();
+	
+		//Gets the list of players with live
+		ArrayList<UUID> playersWithLive = Main.getInstance().getLiveList();
+		
+		//Removes player from live
+		playersWithLive.remove(p.getUniqueId());
 	}
 }
 //End Class
