@@ -260,7 +260,7 @@ public class UpdateCall extends BukkitRunnable
 		else if (bSeasonalTime)
 		{
 			LiveWeatherUtil LWU = new LiveWeatherUtil(player, locationTo);
-			LWU.call(true, bSeasonalTime, true);
+			LWU.call(false, bSeasonalTime, true);
 		}
 	}
 	
