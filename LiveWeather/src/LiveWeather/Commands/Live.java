@@ -53,6 +53,7 @@ public class Live implements CommandExecutor
 				p.resetPlayerTime();
 				p.setGameMode(GameMode.CREATIVE);
 				p.setWalkSpeed((float) 0.2);
+				p.setResourcePack(Main.getInstance().getConfig().getString("defaultResourcePack"));
 				
 				//Now reenables liveweather or livetime
 				

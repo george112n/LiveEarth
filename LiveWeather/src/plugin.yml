@@ -1,5 +1,5 @@
 name: LiveWeather
-version: 2.6.1
+version: 2.6.4
 main: LiveWeather.Main
 description: Allows player to experience live weather or live time in the location they are at
 

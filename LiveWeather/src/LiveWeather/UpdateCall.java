@@ -271,6 +271,7 @@ public class UpdateCall extends BukkitRunnable
 		p.setGameMode(GameMode.ADVENTURE);
 		p.setAllowFlight(false);
 		p.setWalkSpeed((float) 0.14);
+		p.setResourcePack(Main.getInstance().getConfig().getString("resourcePack"));
 	}
 	
 	//Same as above for now but is here for future
