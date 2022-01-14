@@ -316,7 +316,11 @@ public class Main extends JavaPlugin
 	{
 		try
 		{
-			if(connection.isClosed() || connection == null)
+			if(connection == null)
+			{
+				connect();
+			}
+			else if(connection.isClosed())
 			{
 				connect();
 			}

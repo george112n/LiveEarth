@@ -72,7 +72,12 @@ public class LiveWeatherUtil
 		x = 2709234;
 		z = -5552662;
 		coords = getCoords(x, z);
-				
+
+		if (coords[0] == Double.NaN)
+		{
+			return;
+		}
+
 		//Compiles the request URL
 		compileSourceURL(coords);
 		
@@ -120,6 +125,10 @@ public class LiveWeatherUtil
 		x = pLocation.getX();
 		z = pLocation.getZ();
 		coords = getCoords(x, z);
+		if (coords[0] == Double.NaN)
+		{
+			return;
+		}
 		
 		//Compiles the request URL
 		compileSourceURL(coords);
