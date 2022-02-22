@@ -1,0 +1,15 @@
+name: LiveEarth
+version: '${project.version}'
+main: com.bteuk.liveearth.LiveEarth
+authors: [ george112n, ELgamer, XboxBedrock ]
+description: Allows player to experience live weather or live time in the location they are at
+commands:
+  liveweather:
+    usage: /<command> [player]
+    description: Toggles live weather.
+  livetime:
+    usage: /<command> [player]
+    description: Toggles live time on and off.
+  live:
+    usage: /<command> [player]
+    description: Explore the world in as realistic state as possible
