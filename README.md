@@ -6,3 +6,6 @@ It does the same with time by reading sunrise and sunset in from the API of the 
 A "Live" mode aims to make the experience as close to real life as possible by giving a player a specific resource pack, setting their gamemode to adventure, setting their walk speed to 0.7 and turning liveweather and livetime on.
 
 All of these features are toogleable by the player and can also be toogled by server admins.
+
+
+In the future, LiveEarth will be remade as a mod, which will enable a broader set of features to be implemented.
